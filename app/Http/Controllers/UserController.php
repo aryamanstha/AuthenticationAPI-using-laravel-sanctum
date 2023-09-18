@@ -11,24 +11,42 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name'=>'required',
-            'email'=>'required|email|unique:users',
-            'password'=>'required|confirmed',
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|confirmed',
         ]);
-        if(User::where('email',$request->email)->first()){
+        if (User::where('email', $request->email)->first()) {
             return response()->json([
-                'message'=>'Email already exists'
-            ],409);          
+                'message' => 'Email already exists'
+            ], 409);
         }
         $user = User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>Hash::make($request->password)
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
         ]);
-        $token=$user->createToken($request->email)->plainTextToken;
+        $token = $user->createToken($request->email)->plainTextToken;
         return response()->json([
-            'token'=>$token,
-            'message'=>'Registration Successful'
-        ],200);
+            'token' => $token,
+            'message' => 'Registration Successful'
+        ], 201);
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+        $user = User::where('email', $request->email)->first();
+        if ($user && Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'token' => $user->createToken($request->email)->plainTextToken,
+                'message' => 'Login Successful'
+            ], 200);
+        }
+        return response()->json([
+            'message'=>'The Credentials are incorrect',
+        ],401);
     }
 }
