@@ -19,5 +19,11 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+//-------------------Public Routes---------------------
 Route::post('/register',[UserController::class,'register']);
 Route::post('/login',[UserController::class,'login']);
+
+//--------------------Protected Routes-----------------
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/logout',[UserController::class,'logout']);
+});

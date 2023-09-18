@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -46,7 +47,17 @@ class UserController extends Controller
             ], 200);
         }
         return response()->json([
-            'message'=>'The Credentials are incorrect',
-        ],401);
+            'message' => 'The Credentials are incorrect',
+        ], 401);
     }
+    public function logout()
+    {
+        $user=Auth::user();
+        $user->tokens()->delete();
+        return response()->json([
+            'message' => 'Logout Successful'
+        ], 200);
+    }
+
+    public f
 }
