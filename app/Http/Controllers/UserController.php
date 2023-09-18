@@ -59,5 +59,11 @@ class UserController extends Controller
         ], 200);
     }
 
-    public f
+    public function getLoggedUser(){
+        $data=Auth::user();
+        return response()->json([
+            ' logged_in data'=>$data,
+            'message'=>'Logged In User data',
+        ],200);
+    }
 }
