@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
 class UserController extends Controller
 {
     public function register(Request $request)
@@ -64,6 +63,18 @@ class UserController extends Controller
         return response()->json([
             ' logged_in data'=>$data,
             'message'=>'Logged In User data',
+        ],200);
+    }
+
+    public function changePassword(Request $request){
+        $request->validate(([
+            'password'=>'required|confirmed'
+        ]));
+        $data=Auth::user();
+        $data->password=Hash::make($request->password);
+        $data->save();
+        return response()->json([
+            'message'=>'Password Changed Successfully'
         ],200);
     }
 }
