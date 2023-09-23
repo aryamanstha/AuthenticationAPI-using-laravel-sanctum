@@ -77,4 +77,13 @@ class UserController extends Controller
             'message'=>'Password Changed Successfully'
         ],200);
     }
+    public function getResetEmail(Request $request)
+    {
+        //Validate Email
+        $request->validate([
+            
+            'email' => 'required|email',
+            
+        ]);
+    }
 }
